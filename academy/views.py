@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Сandidate, Jedi, Answer, Question
-from django.views.generic import ListView, DetailView
+from .models import Сandidate, Jedi, Answer, Question, Choice
+from django.views.generic import ListView, DetailView, CreateView
 from django import forms
 from django.views.generic.base import View
 from .forms import СandidateForm, AnswerForm
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 
 def candidateView(request):
@@ -31,6 +32,19 @@ class CandidateDetailView(DetailView):
         return context
 
 
+class AnswerQuestions(View):
+    def post(self, request, slug, qestions_id):
+        candidate = Сandidate.objects.get(id=slug)
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.candidate = candidate
+            form.qestions = Question.objects.get(id=qestions_id)
+            form.answer = Choice.objects.get(id=int(request.POST.get("answer")))
+            form.save()
+        return redirect(candidate.get_absolute_url())
+
+
 class JediView(ListView):
     model = Jedi
     queryset = Jedi.objects.all()
@@ -55,3 +69,4 @@ def index(request):
     context = {'types': res}
 
     return render(request, 'index.html', context)
+

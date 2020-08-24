@@ -15,13 +15,16 @@
     </div>
         {% for question in questions %}
             <h4>{{ question }}</h4>
-                {% for cho in question.choice.all %}
-                    <h5>{{ cho }}</h5>
-                {% endfor %}
+                <form action="{% url 'question' candidate.id question.id %}" method="POST">
+                {% csrf_token %}
+                    {% for cho in question.choice.all %}
+                        <p><input type="radio" name="answer" value="{{ cho.id }}"/>{{ cho }}</p>
+                    {% endfor %}
+                    <button type="submit">Save</button>
+                </form>
+              
         {% endfor %}
-    </div>
 
-    <div class="my-3 p-3 bg-white rounded box-shadow">
     </div>
 
 </main>

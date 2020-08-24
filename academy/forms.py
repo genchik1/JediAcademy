@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Сandidate, Answer
+from .models import Сandidate, Answer, Question
 
 
 class СandidateForm(forms.ModelForm):
@@ -12,4 +12,5 @@ class СandidateForm(forms.ModelForm):
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = ("qestions",)
+        fields = ("answer",)
+

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Planet, Jedi, Сandidate, Question, Choice
+from .models import Planet, Jedi, Сandidate, Question, Choice, Answer
 
 
 @admin.register(Planet)
@@ -58,3 +58,4 @@ class ChoiceAdmin(admin.ModelAdmin):
         "title",
     )    
 
+    
