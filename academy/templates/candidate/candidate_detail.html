@@ -1,0 +1,30 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+<main role="main" class="container-task">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+        <div class="lh-100">
+            <h4 class="mb-0 text-white lh-100">Candidate</h4>
+            <small></small>
+        </div>
+
+    <div>
+        <h3>{{ candidate }}</h3>
+        <h3>{{ candidate.name }}</h3>
+        <h3>{{ candidate.age }}</h3>
+        <h3>{{ candidate.habitat_planet }}</h3>
+    </form>
+    </div>
+        {% for question in questions %}
+            <h4>{{ question }}</h4>
+                {% for cho in question.choice.all %}
+                    <h5>{{ cho }}</h5>
+                {% endfor %}
+        {% endfor %}
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+    </div>
+
+</main>
+
+
+{% endblock %}

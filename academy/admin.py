@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Planet, Jedi, Сandidate
+from .models import Planet, Jedi, Сandidate, Question, Choice
 
 
 @admin.register(Planet)
@@ -43,3 +43,18 @@ class СandidateAdmin(admin.ModelAdmin):
     list_display_links = (
         'name',
     )
+
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+    )
+    
+
+@admin.register(Choice)
+class ChoiceAdmin(admin.ModelAdmin):
+    list_display = (
+        "title",
+    )    
+

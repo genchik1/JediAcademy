@@ -36,6 +36,22 @@ class Jedi(models.Model):
         return reverse("jedi_detail", kwargs={"slug": self.id})
 
 
+class Choice(models.Model):
+    title = models.CharField(max_length=4096)
+
+    def __str__(self):
+        return self.title
+
+
+class Question(models.Model):
+    title = models.CharField(max_length=4096)
+    visible = models.BooleanField(default=False)
+    choice = models.ManyToManyField(Choice)
+
+    def __str__(self):
+           return self.title
+
+
 class Сandidate(models.Model):
     name = models.CharField(max_length=250)
     age = models.PositiveSmallIntegerField()
@@ -47,3 +63,15 @@ class Сandidate(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse("candidate_detail", kwargs={"slug": self.id})
+
+
+class Answer(models.Model):
+    candidate = models.ForeignKey(Сandidate, on_delete=models.CASCADE)
+    qestions = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.ForeignKey(Choice, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
