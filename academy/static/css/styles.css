@@ -1,0 +1,39 @@
+html, body {
+    height: 100%;
+}
+
+
+.index_body {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding-top: 500px;
+}
+
+.header {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    background: url(../images/baner2-min.jpg)  center;
+    background-size: cover;
+}
+
+.header_inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    font-size: 60px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: black 0 0 5px;
+    padding-top: 350px;
+    padding-bottom: 50px; 
+}

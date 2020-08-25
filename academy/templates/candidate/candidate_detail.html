@@ -1,30 +1,37 @@
 {% extends "base.html" %} {% block content %} {% load static %}
 <main role="main" class="container-task">
-    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple ">
+        <img class="mr-3" src="https://image.flaticon.com/icons/svg/1167/1167679.svg" alt="" width="48" height="48">
         <div class="lh-100">
             <h4 class="mb-0 text-white lh-100">Candidate</h4>
             <small></small>
         </div>
-
-    <div>
-        <h3>{{ candidate }}</h3>
-        <h3>{{ candidate.name }}</h3>
-        <h3>{{ candidate.age }}</h3>
-        <h3>{{ candidate.habitat_planet }}</h3>
-    </form>
     </div>
-        {% for question in questions %}
-            <h4>{{ question }}</h4>
-                <form action="{% url 'question' candidate.id question.id %}" method="POST">
-                {% csrf_token %}
-                    {% for cho in question.choice.all %}
-                        <p><input type="radio" name="answer" value="{{ cho.id }}"/>{{ cho }}</p>
-                    {% endfor %}
-                    <button type="submit">Save</button>
-                </form>
-              
-        {% endfor %}
 
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div>
+                <h3>{{ candidate.name }}</h3>
+                <h4>Возраст: {{ candidate.age }}</h4>
+                <h4>Планета: {{ candidate.habitat_planet }}</h4>
+        </div>
+    </div>
+
+    <div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="">
+            {% for question in questions %}
+                <p class="">
+                    <h4>{{ question }}</h4>
+                    <form action="{% url 'question' candidate.id question.id %}" method="POST">
+                    {% csrf_token %}
+                        {% for cho in question.choice.all %}
+                            <p><input type="radio" name="answer" value="{{ cho.id }}"/>{{ cho }}</p>
+                        {% endfor %}
+                        <button type="submit">Save</button>
+                    </form>
+                </p>
+            {% endfor %}
+        </div>
+    </div>
     </div>
 
 </main>
