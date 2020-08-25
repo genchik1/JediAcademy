@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+<main role="main" class="container-task">
+    <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple ">
+        <img class="mr-3" src="https://image.flaticon.com/icons/svg/1167/1167679.svg" alt="" width="48" height="48">
+        <div class="lh-100">
+            <h4 class="mb-0 text-white lh-100">Question</h4>
+            <small></small>
+        </div>
+    </div>
+
+<div class="my-3 p-3 bg-white rounded box-shadow">
+        <div class="">
+            <p class="">
+            <h4>{{ question }}</h4>
+            <form action="{% url 'question_detail' candidate.id question.id %}" method="POST" >
+            {% csrf_token %}
+            {% for cho in question.choice.all %}
+                <input type="radio" name="answer" value="{{ cho.id }}"/>{{ cho }}
+            {% endfor %}
+            <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+
+{% for question in questions %}
+            <p class="">
+            <form action="{% url 'question' candidate.id question.id %}" method="POST" >
+            {% csrf_token %}
+            {% for cho in question.choice.all %}
+                <input type="radio" name="answer" value="{{ cho.id }}"/>{{ cho }}
+                <input type="hidden"  name="question" value="{{ question.id }}"/>
+            {% endfor %}
+            <button type="submit">Save</button>
+            </form>
+        {% endfor %}

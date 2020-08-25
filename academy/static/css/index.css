@@ -1,0 +1,41 @@
+html,
+body {
+  height: 100%;
+}
+
+caption {
+    caption-side: top;
+    text-align: left;
+    padding: 10px 0; 
+    font-size: 14px;
+}
+
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 2px solid purple;
+    width: 600px;
+    margin: auto;
+  }
+
+thead th, tfoot th {
+    font-family: 'Rock Salt', cursive;
+}
+  
+th {
+    letter-spacing: 2px;
+    border: 1px solid grey;
+}
+  
+td {
+    letter-spacing: 1px;
+    border: 1px solid grey;
+}
+  
+tbody td {
+    text-align: center;
+}
+  
+tfoot th {
+    text-align: right;
+}

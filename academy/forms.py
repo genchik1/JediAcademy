@@ -12,5 +12,5 @@ class СandidateForm(forms.ModelForm):
 class AnswerForm(forms.ModelForm):
     class Meta:
         model = Answer
-        fields = ("answer",)
+        fields = ("answer", "qestions",)
 

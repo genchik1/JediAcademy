@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Сandidate, Jedi, Answer, Question, Choice
 from django.views.generic import ListView, DetailView, CreateView
 from django import forms
+from django.http.request import QueryDict
 from django.views.generic.base import View
 from .forms import СandidateForm, AnswerForm
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
@@ -33,15 +34,35 @@ class CandidateDetailView(DetailView):
 
 
 class AnswerQuestions(View):
-    def post(self, request, slug, qestions_id):
+    # model = Question
+    # pk_field = "id"
+    # template_name = "candidate/candidate_detail.html"
+    # context_object_name = 'question'
+
+    def myrequest(self, req):
+        myreq = []
+        for key, val in req.POST.dict().items():
+            if key != 'csrfmiddlewaretoken':
+                if key.startswith('answer'):
+                    question = key.split('-')[1]
+                    myreq.append({
+                        'csrfmiddlewaretoken':req.POST.get('csrfmiddlewaretoken'),
+                        'answer':val,
+                        'qestions':question,
+                    })
+        return myreq
+
+    def post(self, request, slug):
+        my_dict = self.myrequest(request)
         candidate = Сandidate.objects.get(id=slug)
-        form = AnswerForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.candidate = candidate
-            form.qestions = Question.objects.get(id=qestions_id)
-            form.answer = Choice.objects.get(id=int(request.POST.get("answer")))
-            form.save()
+        for md in my_dict:
+            form = AnswerForm(md)
+            if form.is_valid():
+                myform = form.save(commit=False)
+                myform.candidate = candidate
+                myform.qestions = Question.objects.get(id=int(md['qestions']))
+                myform.answer = Choice.objects.get(id=int(md['answer']))
+                myform.save()
         return redirect(candidate.get_absolute_url())
 
 
