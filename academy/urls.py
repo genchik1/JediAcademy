@@ -10,5 +10,6 @@ urlpatterns = [
     path('candidate/<slug:slug>/question/', views.AnswerQuestions.as_view(), name='question'),
     path('jedi/', views.JediView.as_view(), name='jedis'),
     path('jedi/<slug:slug>/', views.JediDetailView.as_view(), name='jedi_detail'),
+    path('jedi/<slug:slug>/to_padavan/', views.JediDetailView.as_view(), name='to_padavan'),
     path('', views.index, name='index'),
 ]

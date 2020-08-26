@@ -13,6 +13,7 @@
                 <h3>{{ candidate.name }}</h3>
                 <h4>Возраст: {{ candidate.age }}</h4>
                 <h4>Планета: {{ candidate.habitat_planet }}</h4>
+                <h3>Статус: {% if padavan_status != None %}Поздравляем! Вы стали падаваном джедая {{padavan_status}}{% else %}Кандидат{% endif %}</h3>
         </div>
     </div>
 
