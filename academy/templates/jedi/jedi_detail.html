@@ -11,17 +11,25 @@
 <div class="">
     <h3>{{jedi.name}}</h3>
     <h3>{{jedi.grade}}</h3>
+    <h3>Padavans: {{count_padavans}}/{{max_count_padavans}}</h3>
 
     <div>
-    <h4>Кандидаты:</h4>
+    <h4>Мои ученики:</h4>
+        {% for padavan in padavans %}
+            <h6>{{padavan.name}}</h6>
+        {% endfor %}
+
+    <h4>Другие кандидаты:</h4>
         {% for candidate in candidate_list %}
             <h6>{{candidate.name}}</h6>
+            <form action="{% url 'to_padavan' jedi.id %}" method="POST">
+            {% csrf_token %}
+                <button type="submit" name="sensei" value="{{candidate.id}}">Save</button>
+            </form>
         {% endfor %}
     </div>
 </div>
 
 </main>
 {% endblock %}
-
-
 

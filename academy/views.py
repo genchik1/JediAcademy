@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Сandidate, Jedi, Answer, Question, Choice
+from .models import Сandidate, Jedi, Answer, Question, Choice, Grade
 from django.views.generic import ListView, DetailView, CreateView
 from django import forms
 from django.http.request import QueryDict
@@ -29,7 +29,9 @@ class CandidateDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        candidate = context['candidate']
         context['questions'] = Question.objects.all()
+        context['padavan_status'] = Сandidate.objects.get(id=candidate.id).sensei
         return context
 
 
@@ -79,8 +81,23 @@ class JediDetailView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['candidate_list'] = Сandidate.objects.all()
+        jedi = context['jedi']
+        context['candidate_list'] = Сandidate.objects.filter(sensei__isnull=True)
+        context['padavans'] = Сandidate.objects.filter(sensei=jedi)
+        context['max_count_padavans'] = Grade.objects.get(title=jedi.grade).max_count_padavans
+        context['count_padavans'] = Сandidate.objects.filter(sensei=jedi).count()
         return context
+
+    def post(self, request, slug):
+        jedi = Jedi.objects.get(id=slug)
+        max_count_padavans = Grade.objects.get(title=jedi.grade).max_count_padavans
+        count_padavans = Сandidate.objects.filter(sensei=jedi).count()
+        if count_padavans < max_count_padavans:
+            Сandidate.objects.update_or_create(
+                id=request.POST.get("sensei"),
+                defaults={'sensei':jedi}
+            )
+        return redirect(jedi.get_absolute_url())
 
 
 def index(request):
