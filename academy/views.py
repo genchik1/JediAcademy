@@ -7,6 +7,7 @@ from django.views.generic.base import View
 from .forms import СandidateForm, AnswerForm
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.core.mail import send_mail
 
 
 def candidateView(request):
@@ -92,11 +93,18 @@ class JediDetailView(DetailView):
         jedi = Jedi.objects.get(id=slug)
         max_count_padavans = Grade.objects.get(title=jedi.grade).max_count_padavans
         count_padavans = Сandidate.objects.filter(sensei=jedi).count()
+        sent = False
         if count_padavans < max_count_padavans:
+            subject = 'Test'
+            message = 'HELLO'
+            send_mail(subject, message, 'obi@jedi.com',[Сandidate.objects.get(id=request.POST.get("sensei")).email])
+            sent = True
             Сandidate.objects.update_or_create(
                 id=request.POST.get("sensei"),
                 defaults={'sensei':jedi}
             )
+
+
         return redirect(jedi.get_absolute_url())
 
 
