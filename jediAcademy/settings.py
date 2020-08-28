@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'academy'
+    'academy',
+    'favicon',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +136,8 @@ STATIC_URL = '/static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [STATIC_DIR]
+
+FAVICON_PATH = STATIC_URL + 'images/favicon-32x32.png'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
