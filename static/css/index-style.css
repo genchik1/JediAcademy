@@ -12,16 +12,17 @@ html, body {
     padding-top: 500px;
 }
 
-.header {
+body {
     width: 100%;
-    position: absolute;
+    /* position: absolute; */
     top: 0;
     left: 0;
     right: 0;
     z-index: 1;
-    background: url(../images/baner2-min.jpg)  center;
+    background: url(../images/index_background2.jpg)  center;
     background-size: cover;
 }
+
 
 .header_inner {
     display: flex;

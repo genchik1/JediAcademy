@@ -11,7 +11,7 @@ class Planet(models.Model):
         ordering = ('title',)
 
     def __str__(self):
-        return self.title
+        return self.title.title()
 
 
 class Grade(models.Model):
@@ -23,27 +23,20 @@ class Grade(models.Model):
         ordering = ('title',)
 
     def __str__(self):
-        return self.title
+        return self.title.title()
 
 
 class Jedi(models.Model):
-    # GRADE_CHOICES = (
-    #     ('grand-master', 'Grand-Master'),
-    #     ('master', 'Master'),
-    #     ('knight', 'Knight'),
-    #     ('padawan', 'Padawan'),
-    # )
-
     name = models.CharField(max_length=250)
     planet = models.ForeignKey(Planet,  on_delete=models.CASCADE)
     grade = models.ForeignKey(Grade, on_delete=models.DO_NOTHING, default=0)
-    # grade = models.CharField(max_length=25, choices=GRADE_CHOICES, blank=False)
+    count_padavans = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
         ordering = ('name',)
 
     def __str__(self):
-        return self.name
+        return self.name.upper()
 
     def get_absolute_url(self):
         return reverse("jedi_detail", kwargs={"slug": self.id})
@@ -55,12 +48,13 @@ class Сandidate(models.Model):
     habitat_planet = models.ForeignKey(Planet, on_delete=models.CASCADE)
     email = models.EmailField()
     sensei = models.ForeignKey(Jedi, on_delete=models.DO_NOTHING, null=True, blank=True)
+    answered_questions = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('name',)
 
     def __str__(self):
-        return self.name
+        return self.name.upper()
 
     def get_absolute_url(self):
         return reverse("candidate_detail", kwargs={"slug": self.id})
@@ -71,7 +65,7 @@ class Choice(models.Model):
     title = models.CharField(max_length=4096)
 
     def __str__(self):
-        return self.title
+        return self.title.title()
 
 
 class Question(models.Model):
@@ -80,7 +74,7 @@ class Question(models.Model):
     choice = models.ManyToManyField(Choice)
 
     def __str__(self):
-           return self.title
+           return self.title.title()
 
     def get_absolute_url(self):
         return reverse("question", kwargs={"pk": self.id})

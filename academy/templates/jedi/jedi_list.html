@@ -1,18 +1,71 @@
-{% extends "base.html" %} {% block content %} {% load static %}
-<main role="main" class="container-task">
-    <div class="">
-        <div class="">
-            <h4 class="">Jedi</h4>
-            <small></small>
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<main role="main">
+    <div class="jumbotron mycontainer rounded-0">
+        <div class="container">
+            <h1 class="display-3 text-white">Привет джедай!</h1>
+            <p class="text-white">На протяжении тысяч поколений, рыцари-джедаи были хранителями мира и справедливости в Старой Республике.</p>
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-3">
+                    <form action="{% url 'filter' %}" method="get" name="filter">
+                        <div class="left-side my-4">
+                            <h3 >Фильтры:</h3>
+                            <h5 >Звания</h5>
+                            <div class="container">
+                                <ul class="form-check">
+                                    {% for grade in view.get_grade %}
+                                        <li class="editContent">
+                                            <input type="checkbox" class="form-check-input" name="grade" value="{{ grade.id }}">
+                                            <span class="span editContent">{{ grade }}</span>
+                                        </li>
+                                    {% endfor %}
+                            </div>
+                            </ul>
+                        </div>
 
-    <div class="">
-        {% for jedi in jedi_list %}
-            <h6><a href="{{ jedi.get_absolute_url }}">{{jedi.name}}</a></h6>
-        {% endfor %}
+                        <div class="left-side">
+                            <h5 >Кол-во падаванов</h5>
+                            <div class="container">
+                                <ul class="form-check">
+                                    {% for jedi in view.get_padavans %}
+                                        <li class="editContent">
+                                            <input type="checkbox" class="form-check-input" name="count_padavans" value="{{ jedi.count_padavans }}">
+                                            <span class="span editContent">{{ jedi.count_padavans }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+        
+                        <button type="submit">Найти</button>
+                    </form>
+            </div>
+            <div class="col-8">
+                <div class="person">
+                    <div class="">
+                        {% for jedi in jedi_list %}
+                            <div class="list">
+                                <div class="list-group">
+                                    <a href="{{ jedi.get_absolute_url }}" class="list-group-item list-group-item-action active">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h3 class="mb-1">{{ jedi }}</h3>
+                                        </div>
+                                        <p class="mb-1">Planet: {{ jedi.planet }}</p>
+                                        <p class="mb-1">Grade: {{ jedi.grade }}</p>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
 </main>
 
 {% endblock %}
