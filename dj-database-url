@@ -36,7 +36,6 @@ Django==3.0.7
 django-debug-panel==0.8.3
 django-debug-toolbar==2.2
 django-extensions==3.0.5
-django-favicon==0.1.3
 docutils==0.15.2
 entrypoints==0.3
 enum34==1.1.6
