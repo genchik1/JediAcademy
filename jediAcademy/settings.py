@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=fxm!656jaf%tqtmdgk(ws4sd2cdsq4o9jnj61qpe710+ee43l'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '=fxm!656jaf%tqtmdgk(ws4sd2cdsq4o9jnj61qpe710+ee43l')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     
 ]
 
@@ -131,8 +132,15 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_DIR = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [STATIC_DIR]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
