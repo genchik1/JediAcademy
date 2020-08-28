@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '=fxm!656jaf%tqtmdgk(ws4sd2cdsq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = ['127.0.0.1', '91.146.10.79']
+ALLOWED_HOSTS = ['*']
 
 
 EMAIL_HOST = 'localhost'
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'academy',
-    'favicon',
 ]
 
 MIDDLEWARE = [
@@ -133,9 +132,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [STATIC_DIR]
 
 
 MEDIA_URL = '/media/'
@@ -145,7 +142,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 import dj_database_url
 import django_heroku
 
-db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config()
 DATABASES['default'].update(db_from_env)
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

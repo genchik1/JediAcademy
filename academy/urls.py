@@ -2,9 +2,6 @@ from django.urls import path
 
 from . import views
 
-from django.views.generic import RedirectView
-
-
 urlpatterns = [
     # task views
     path('candidate/form/', views.candidateFormView, name='candidate_form'),
@@ -19,6 +16,4 @@ urlpatterns = [
     path('jedi/<slug:slug>/to_padavan/', views.JediDetailView.as_view(), name='to_padavan'),
 
     path('', views.index, name='index'),
-
-    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico'), name='favicon'),
 ]
