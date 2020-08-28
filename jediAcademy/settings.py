@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '=fxm!656jaf%tqtmdgk(ws4sd2cdsq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['mysterious-island-70115.herokuapp.com', '127.0.0.1']
 
 
 EMAIL_HOST = 'localhost'
@@ -139,6 +139,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Heroku: Update database configuration from $DATABASE_URL.
+
 import dj_database_url
 import django_heroku
 
