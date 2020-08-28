@@ -28,6 +28,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+EMAIL_HOST = 'localhost'
+EMAIL_HOST_USER = 'obi@jedi.com'
+EMAIL_HOST_PASSWORD = 'your_password'
+EMAIL_PORT = 1025
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# python -m smtpd -n -c DebuggingServer localhost:1025
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'jediAcademy.urls'
@@ -122,4 +131,8 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static/'
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [STATIC_DIR]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

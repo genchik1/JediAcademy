@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Сandidate, Jedi, Answer, Question, Choice, Grade
+from .models import Сandidate, Jedi, Question, Choice, Grade, Answer
 from django.views.generic import ListView, DetailView, CreateView
 from django import forms
 from django.http.request import QueryDict
@@ -7,9 +7,20 @@ from django.views.generic.base import View
 from .forms import СandidateForm, AnswerForm
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.core.mail import send_mail
+from django.db.models import Q
 
 
-def candidateView(request):
+class GradeCountPadavansView:
+    """Жанры и года выхода фильмов"""
+    def get_grade(self):
+        return Grade.objects.all()
+
+    def get_padavans(self):
+        return Jedi.objects.order_by().values("count_padavans").distinct()
+
+
+def candidateFormView(request):
     if request.method == "POST":
         form = СandidateForm(request.POST)
         if form.is_valid():
@@ -19,6 +30,13 @@ def candidateView(request):
     else:
         form = СandidateForm()
     return render(request, 'candidate/form.html', {'form': form})
+
+
+class CandidateView(ListView):
+    model = Сandidate
+    queryset = Сandidate.objects.all()
+    template_name = "candidate/candidate_list.html"
+    context_object_name = 'candidate_list'
 
 
 class CandidateDetailView(DetailView):
@@ -36,11 +54,6 @@ class CandidateDetailView(DetailView):
 
 
 class AnswerQuestions(View):
-    # model = Question
-    # pk_field = "id"
-    # template_name = "candidate/candidate_detail.html"
-    # context_object_name = 'question'
-
     def myrequest(self, req):
         myreq = []
         for key, val in req.POST.dict().items():
@@ -65,16 +78,20 @@ class AnswerQuestions(View):
                 myform.qestions = Question.objects.get(id=int(md['qestions']))
                 myform.answer = Choice.objects.get(id=int(md['answer']))
                 myform.save()
+                Сandidate.objects.update_or_create(
+                    id=slug,
+                    defaults={'answered_questions':True}
+                )
         return redirect(candidate.get_absolute_url())
 
 
-class JediView(ListView):
+class JediView(GradeCountPadavansView, ListView):
     model = Jedi
     queryset = Jedi.objects.all()
     template_name = "jedi/jedi_list.html"
 
     
-class JediDetailView(DetailView):
+class JediDetailView(GradeCountPadavansView, DetailView):
     model = Jedi
     slug_field = "id"
     template_name = "jedi/jedi_detail.html"
@@ -82,29 +99,48 @@ class JediDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         jedi = context['jedi']
-        context['candidate_list'] = Сandidate.objects.filter(sensei__isnull=True)
+        context['candidate_list'] = Сandidate.objects.filter(sensei__isnull=True, answered_questions=True)
         context['padavans'] = Сandidate.objects.filter(sensei=jedi)
-        context['max_count_padavans'] = Grade.objects.get(title=jedi.grade).max_count_padavans
-        context['count_padavans'] = Сandidate.objects.filter(sensei=jedi).count()
+        context['max_count_padavans'] = Grade.objects.get(title=jedi.grade.title).max_count_padavans
+        context['count_padavans'] = jedi.count_padavans
+        context['answered_questions'] = Answer.objects.all()
         return context
 
     def post(self, request, slug):
         jedi = Jedi.objects.get(id=slug)
-        max_count_padavans = Grade.objects.get(title=jedi.grade).max_count_padavans
+        max_count_padavans = Grade.objects.get(title=jedi.grade.title).max_count_padavans
         count_padavans = Сandidate.objects.filter(sensei=jedi).count()
+        sent = False
         if count_padavans < max_count_padavans:
+            subject = 'Test'
+            message = 'HELLO'
+            send_mail(subject, message, 'obi@jedi.com',[Сandidate.objects.get(id=request.POST.get("sensei")).email])
+            sent = True
             Сandidate.objects.update_or_create(
                 id=request.POST.get("sensei"),
                 defaults={'sensei':jedi}
             )
+            Jedi.objects.update_or_create(
+                id=slug,
+                defaults={'count_padavans':Jedi.objects.get(id=slug).count_padavans+1}
+            )
+
         return redirect(jedi.get_absolute_url())
 
 
 def index(request):
-    
     res = None
-
-    context = {'types': res}
-
+    context = {'types': res, "candidate_list": Сandidate.objects.all()}
     return render(request, 'index.html', context)
 
+
+class FilterGradeCountPadavansView(GradeCountPadavansView, ListView):
+    """Фильтр"""
+    template_name = "jedi/jedi_list.html"
+
+    def get_queryset(self):
+        queryset = Jedi.objects.filter(
+            Q(grade__in=self.request.GET.getlist("grade")) |
+            Q(count_padavans__in=self.request.GET.getlist("count_padavans"))
+        )
+        return queryset

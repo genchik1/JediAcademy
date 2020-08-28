@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+<main role="main">
+    <div class="jumbotron mycontainer rounded-0">
+        <div class="container">
+            <h1 class="display-3 text-white">Кандидаты в ученики джедая</h1>
+            <p class="text-white">На протяжении тысяч поколений, рыцари-джедаи были хранителями мира и справедливости в Старой Республике.</p>
+            <p class="text-white">Выбери себя из списка, чтобы попасть на свою страницу или жми на кнопку ниже для регистрации.</p>
+            <p><a class="btn btn-primary btn-lg" href="{% url 'candidate_form' %}" role="button">Регистрация</a></p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="person">
+            <div class="">
+                {% for candidate in candidate_list %}
+                    <div class="list">
+                        <div class="list-group">
+                            <a href="{{ candidate.get_absolute_url }}" class="list-group-item list-group-item-action active">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h3 class="mb-1">{{ candidate }}</h3>
+                                </div>
+                                <p class="mb-1">Planet: {{ candidate.planet }}</p>
+                                <p class="mb-1">Возраст: {{ candidate.age }}</p>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}
