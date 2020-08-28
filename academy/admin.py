@@ -67,5 +67,6 @@ class ChoiceAdmin(admin.ModelAdmin):
 class GradeAdmin(admin.ModelAdmin):
     list_display = (
         "title",
+        "max_count_padavans",
     )   
     

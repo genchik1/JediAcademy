@@ -13,19 +13,17 @@
         <div class="person">
             <div class="">
                 {% for candidate in candidate_list %}
-                    {% if candidate.answered_questions %}
-                        <div class="list">
-                            <div class="list-group">
-                                <a href="{{ candidate.get_absolute_url }}" class="list-group-item list-group-item-action active">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h3 class="mb-1">{{ candidate }}</h3>
-                                    </div>
-                                    <p class="mb-1">Planet: {{ candidate.planet }}</p>
-                                    <p class="mb-1">Возраст: {{ candidate.age }}</p>
-                                </a>
-                            </div>
+                    <div class="list">
+                        <div class="list-group">
+                            <a href="{{ candidate.get_absolute_url }}" class="list-group-item list-group-item-action active">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h3 class="mb-1">{{ candidate }}</h3>
+                                </div>
+                                <p class="mb-1">Planet: {{ candidate.planet }}</p>
+                                <p class="mb-1">Возраст: {{ candidate.age }}</p>
+                            </a>
                         </div>
-                    {% endif %}
+                    </div>
                 {% endfor %}
             </div>
         </div>

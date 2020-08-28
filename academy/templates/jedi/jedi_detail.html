@@ -30,11 +30,22 @@
                 <div class="person">
                     <div class="">
                         {% for candidate in candidate_list %}
-                            <div class="card" style="width: 18rem;">
+                            <div class="card" style="width: 45rem;">
                             <div class="card-body">
                                 <h4 class="card-title">{{ candidate }}</h4>
                                 <p class="mb-1">Планета: {{ candidate.planet }}</p>
                                 <p class="mb-1">Возраст: {{ candidate.age }}</p>
+                                <p class="mb-1">Ответы на тестовые вопросы: </p>
+                                <div class="container">
+                                {% for aq in answered_questions %}
+                                    {% if aq.candidate == candidate %}
+                                        <div class="card-text">
+                                        <small class="mb-1">{{ aq.qestions }}</small>
+                                        <small class="mb-1">Ответ: {{ aq.answer }}</small>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                </div>
                                 <form action="{% url 'to_padavan' jedi.id %}" method="POST">
                                 {% csrf_token %}
                                     <button type="submit" name="sensei" value="{{candidate.id}}" class="btn btn-primary">Взять в ученики</button>
