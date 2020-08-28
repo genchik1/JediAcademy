@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '=fxm!656jaf%tqtmdgk(ws4sd2cdsq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = ['mysterious-island-70115.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 EMAIL_HOST = 'localhost'
