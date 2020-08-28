@@ -112,9 +112,9 @@ class JediDetailView(GradeCountPadavansView, DetailView):
         count_padavans = Сandidate.objects.filter(sensei=jedi).count()
         sent = False
         if count_padavans < max_count_padavans:
-            subject = 'Test'
-            message = 'HELLO'
-            send_mail(subject, message, 'obi@jedi.com',[Сandidate.objects.get(id=request.POST.get("sensei")).email])
+            subject = 'Академия джедаев'
+            message = f'Поздравляем! Вы зачислены в ученики {jedi.name}.'
+            send_mail(subject, message, 'academy@jedi.com',[Сandidate.objects.get(id=request.POST.get("sensei")).email])
             sent = True
             Сandidate.objects.update_or_create(
                 id=request.POST.get("sensei"),
