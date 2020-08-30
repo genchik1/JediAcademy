@@ -5,6 +5,7 @@
             <h1 class="display-3 text-white">Привет {{jedi}}!</h1>
             <p class="text-white">На протяжении тысяч поколений, рыцари-джедаи были хранителями мира и справедливости в Старой Республике.</p>
             <p class="text-white">Выбери себе юного ученика (но не больше {{max_count_padavans}}), дабы пополнить ряды доблесных воинов.</p>
+            <p class="text-white">{{ jedi.candidate_set.count }}</p>
         </div>
     </div>
     <div class="container">
@@ -37,18 +38,16 @@
                                 <p class="mb-1">Возраст: {{ candidate.age }}</p>
                                 <p class="mb-1">Ответы на тестовые вопросы: </p>
                                 <div class="container">
-                                {% for aq in answered_questions %}
-                                    {% if aq.candidate == candidate %}
+                                {% for aq in candidate.answer_set.all %}
                                         <div class="card-text">
                                         <small class="mb-1">{{ aq.qestions }}</small>
-                                        <small class="mb-1">Ответ: {{ aq.answer }}</small>
+                                        <small class="mb-1">Ответ: {{ aq.ans }}</small>
                                         </div>
-                                    {% endif %}
                                 {% endfor %}
                                 </div>
                                 <form action="{% url 'to_padavan' jedi.id %}" method="POST">
                                 {% csrf_token %}
-                                    <button type="submit" name="sensei" value="{{candidate.id}}" class="btn btn-primary">Взять в ученики</button>
+                                    <button type="submit" name="jedi" value="{{candidate.id}}" class="btn btn-primary">Взять в ученики</button>
                                 </form>
                             </div>
                             </div>

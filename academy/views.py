@@ -49,7 +49,7 @@ class CandidateDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         candidate = context['candidate']
         context['questions'] = Question.objects.all()
-        context['padavan_status'] = Сandidate.objects.get(id=candidate.id).sensei
+        context['padavan_status'] = Сandidate.objects.get(id=candidate.id).jedi
         return context
 
 
@@ -68,6 +68,7 @@ class AnswerQuestions(View):
         return myreq
 
     def post(self, request, slug):
+        print (request)
         my_dict = self.myrequest(request)
         candidate = Сandidate.objects.get(id=slug)
         for md in my_dict:
@@ -76,7 +77,7 @@ class AnswerQuestions(View):
                 myform = form.save(commit=False)
                 myform.candidate = candidate
                 myform.qestions = Question.objects.get(id=int(md['qestions']))
-                myform.answer = Choice.objects.get(id=int(md['answer']))
+                myform.ans = Choice.objects.get(id=int(md['answer']))
                 myform.save()
                 Сandidate.objects.update_or_create(
                     id=slug,
@@ -99,26 +100,28 @@ class JediDetailView(GradeCountPadavansView, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         jedi = context['jedi']
-        context['candidate_list'] = Сandidate.objects.filter(sensei__isnull=True, answered_questions=True)
-        context['padavans'] = Сandidate.objects.filter(sensei=jedi)
+        context['candidate_list'] = Сandidate.objects.filter(jedi__isnull=True)
+        context['padavans'] = Сandidate.objects.filter(jedi=jedi)
         context['max_count_padavans'] = Grade.objects.get(title=jedi.grade.title).max_count_padavans
         context['count_padavans'] = jedi.count_padavans
-        context['answered_questions'] = Answer.objects.all()
         return context
 
     def post(self, request, slug):
         jedi = Jedi.objects.get(id=slug)
         max_count_padavans = Grade.objects.get(title=jedi.grade.title).max_count_padavans
-        count_padavans = Сandidate.objects.filter(sensei=jedi).count()
+        count_padavans = Сandidate.objects.filter(jedi=jedi).count()
         sent = False
         if count_padavans < max_count_padavans:
+
+            # send_mail
             subject = 'Академия джедаев'
             message = f'Поздравляем! Вы зачислены в ученики {jedi.name}.'
-            send_mail(subject, message, 'academy@jedi.com',[Сandidate.objects.get(id=request.POST.get("sensei")).email])
+            send_mail(subject, message, 'academy@jedi.com',[Сandidate.objects.get(id=request.POST.get("jedi")).email])
             sent = True
+
             Сandidate.objects.update_or_create(
-                id=request.POST.get("sensei"),
-                defaults={'sensei':jedi}
+                id=request.POST.get("jedi"),
+                defaults={'jedi':jedi}
             )
             Jedi.objects.update_or_create(
                 id=slug,

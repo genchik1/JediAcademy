@@ -47,8 +47,7 @@ class Сandidate(models.Model):
     age = models.PositiveSmallIntegerField()
     habitat_planet = models.ForeignKey(Planet, on_delete=models.CASCADE)
     email = models.EmailField()
-    sensei = models.ForeignKey(Jedi, on_delete=models.DO_NOTHING, null=True, blank=True)
-    answered_questions = models.BooleanField(default=False)
+    jedi = models.ForeignKey(Jedi, on_delete=models.DO_NOTHING, null=True, blank=True)
 
     class Meta:
         ordering = ('name',)
@@ -58,7 +57,6 @@ class Сandidate(models.Model):
 
     def get_absolute_url(self):
         return reverse("candidate_detail", kwargs={"slug": self.id})
-
 
 
 class Choice(models.Model):
@@ -80,11 +78,10 @@ class Question(models.Model):
         return reverse("question", kwargs={"pk": self.id})
 
 
-
 class Answer(models.Model):
-    candidate = models.ForeignKey(Сandidate, on_delete=models.CASCADE)
-    qestions = models.ForeignKey(Question, on_delete=models.CASCADE)
-    answer = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    candidate = models.ForeignKey(Сandidate, on_delete=models.CASCADE, blank=True, null=True)
+    qestions = models.ForeignKey(Question, on_delete=models.CASCADE, blank=True, null=True)
+    ans = models.ForeignKey(Choice, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.id
