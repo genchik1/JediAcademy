@@ -63,7 +63,7 @@ class AnswerQuestions(View):
                     myreq.append({
                         'csrfmiddlewaretoken':req.POST.get('csrfmiddlewaretoken'),
                         'answer':val,
-                        'qestions':question,
+                        'question':question,
                     })
         return myreq
 
@@ -76,7 +76,7 @@ class AnswerQuestions(View):
             if form.is_valid():
                 myform = form.save(commit=False)
                 myform.candidate = candidate
-                myform.qestions = Question.objects.get(id=int(md['qestions']))
+                myform.qestions = Question.objects.get(id=int(md['question']))
                 myform.ans = Choice.objects.get(id=int(md['answer']))
                 myform.save()
                 Сandidate.objects.update_or_create(
@@ -103,13 +103,12 @@ class JediDetailView(GradeCountPadavansView, DetailView):
         context['candidate_list'] = Сandidate.objects.filter(jedi__isnull=True)
         context['padavans'] = Сandidate.objects.filter(jedi=jedi)
         context['max_count_padavans'] = Grade.objects.get(title=jedi.grade.title).max_count_padavans
-        context['count_padavans'] = jedi.count_padavans
         return context
 
     def post(self, request, slug):
         jedi = Jedi.objects.get(id=slug)
         max_count_padavans = Grade.objects.get(title=jedi.grade.title).max_count_padavans
-        count_padavans = Сandidate.objects.filter(jedi=jedi).count()
+        count_padavans = jedi.сandidate_set.count()
         sent = False
         if count_padavans < max_count_padavans:
 
@@ -122,10 +121,6 @@ class JediDetailView(GradeCountPadavansView, DetailView):
             Сandidate.objects.update_or_create(
                 id=request.POST.get("jedi"),
                 defaults={'jedi':jedi}
-            )
-            Jedi.objects.update_or_create(
-                id=slug,
-                defaults={'count_padavans':Jedi.objects.get(id=slug).count_padavans+1}
             )
 
         return redirect(jedi.get_absolute_url())

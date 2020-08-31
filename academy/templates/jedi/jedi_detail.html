@@ -40,7 +40,7 @@
                                 <div class="container">
                                 {% for aq in candidate.answer_set.all %}
                                         <div class="card-text">
-                                        <small class="mb-1">{{ aq.qestions }}</small>
+                                        <small class="mb-1">{{ aq.question }}</small>
                                         <small class="mb-1">Ответ: {{ aq.ans }}</small>
                                         </div>
                                 {% endfor %}

@@ -30,7 +30,7 @@ class JediAdmin(admin.ModelAdmin):
         'name',
     )
 
-    exclude = ('count_padavans',)
+    exclude = ('padavans',)
 
 
 @admin.register(Сandidate)
@@ -45,8 +45,6 @@ class СandidateAdmin(admin.ModelAdmin):
     list_display_links = (
         'name',
     )
-
-    exclude = ('answered_questions', )
 
 
 @admin.register(Question)
