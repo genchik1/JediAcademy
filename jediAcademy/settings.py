@@ -87,19 +87,20 @@ WSGI_APPLICATION = 'jediAcademy.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db2.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db2.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'academy',
+        'USER' : 'postgres',
+        'PASSWORD' : '1Qwerty',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
     }
 }
-# 'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'academy',
-#         'USER' : 'postgres',
-#         'PASSWORD' : '1Qwerty',
-#         'HOST' : 'localhost',
-#         'PORT' : '5432',
-#     }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
