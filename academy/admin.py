@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import Planet, Jedi, Сandidate, Question, Choice, Answer, Grade
 
 
@@ -13,9 +11,6 @@ class PlanetAdmin(admin.ModelAdmin):
     list_display_links = (
         'title',
     )
-
-    # list_filter = (
-    # )
 
 
 @admin.register(Jedi)

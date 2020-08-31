@@ -9,6 +9,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.mail import send_mail
 from django.db.models import Q
+from django.db.models import Count
 
 
 class GradeCountPadavansView:
@@ -17,7 +18,8 @@ class GradeCountPadavansView:
         return Grade.objects.all()
 
     def get_padavans(self):
-        return Jedi.objects.order_by().values("count_padavans").distinct()
+        return Jedi.objects.values('name').annotate(count_padavans=Count('sensei'))\
+                .values('count_padavans').order_by('count_padavans').distinct()
 
 
 def candidateFormView(request):
@@ -68,12 +70,14 @@ class AnswerQuestions(View):
         return myreq
 
     def post(self, request, slug):
-        print (request)
+        print (request.POST)
         my_dict = self.myrequest(request)
         candidate = Сandidate.objects.get(id=slug)
         for md in my_dict:
+            print (request.POST)
             form = AnswerForm(md)
             if form.is_valid():
+                print (request.POST)
                 myform = form.save(commit=False)
                 myform.candidate = candidate
                 myform.qestions = Question.objects.get(id=int(md['question']))
@@ -108,10 +112,10 @@ class JediDetailView(GradeCountPadavansView, DetailView):
     def post(self, request, slug):
         jedi = Jedi.objects.get(id=slug)
         max_count_padavans = Grade.objects.get(title=jedi.grade.title).max_count_padavans
-        count_padavans = jedi.сandidate_set.count()
+        count_padavans = jedi.sensei.count()
         sent = False
-        if count_padavans < max_count_padavans:
 
+        if count_padavans < max_count_padavans:
             # send_mail
             subject = 'Академия джедаев'
             message = f'Поздравляем! Вы зачислены в ученики {jedi.name}.'
@@ -121,10 +125,6 @@ class JediDetailView(GradeCountPadavansView, DetailView):
             Сandidate.objects.update_or_create(
                 id=request.POST.get("jedi"),
                 defaults={'jedi':jedi}
-            )
-            Jedi.objects.update_or_create(
-                id=slug,
-                defaults={'count_padavans':int(jedi.count_padavans)+1}
             )
 
         return redirect(jedi.get_absolute_url())
@@ -141,8 +141,10 @@ class FilterGradeCountPadavansView(GradeCountPadavansView, ListView):
     template_name = "jedi/jedi_list.html"
 
     def get_queryset(self):
+        print ()
         queryset = Jedi.objects.filter(
             Q(grade__in=self.request.GET.getlist("grade")) |
-            Q(count_padavans__in=self.request.GET.getlist("count_padavans"))
+            Q(name__in=Jedi.objects.values('name').annotate(count_padavans=Count('sensei'))\
+                .filter(count_padavans__in=self.request.GET.getlist("count_padavans")).values_list('name'))
         )
         return queryset

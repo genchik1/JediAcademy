@@ -30,7 +30,6 @@ class Jedi(models.Model):
     name = models.CharField(max_length=250)
     planet = models.ForeignKey(Planet,  on_delete=models.CASCADE)
     grade = models.ForeignKey(Grade, on_delete=models.DO_NOTHING, default=0)
-    count_padavans = models.PositiveSmallIntegerField(default=0)
 
     class Meta:
         ordering = ('name',)
@@ -47,7 +46,8 @@ class Сandidate(models.Model):
     age = models.PositiveSmallIntegerField()
     habitat_planet = models.ForeignKey(Planet, on_delete=models.CASCADE)
     email = models.EmailField()
-    jedi = models.ForeignKey(Jedi, on_delete=models.DO_NOTHING, null=True, blank=True)
+    jedi = models.ForeignKey(Jedi, on_delete=models.DO_NOTHING, null=True, blank=True, related_name='sensei')
+    answered_questions = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('name',)
