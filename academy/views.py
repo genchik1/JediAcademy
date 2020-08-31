@@ -124,7 +124,7 @@ class JediDetailView(GradeCountPadavansView, DetailView):
             )
             Jedi.objects.update_or_create(
                 id=slug,
-                defaults={'count_padavans':int(request.POST.get("jedi").count_padavans)+1}
+                defaults={'count_padavans':int(jedi.count_padavans)+1}
             )
 
         return redirect(jedi.get_absolute_url())
